@@ -1,0 +1,104 @@
+services:
+  auth:
+    build:
+      context: .
+      dockerfile: ./apps/auth/Dockerfile
+      target: development
+    command: yarn start:dev auth
+    ports:
+      - '3000:3000'
+    env_file:
+      - ./apps/auth/.env
+    depends_on:
+      - mongodb-primary
+    volumes:
+     - .:/usr/src/app
+     - /usr/src/app/node_modules
+    networks:
+      - my-network
+  
+  clients:
+    build:
+      context: .
+      dockerfile: ./apps/clients/Dockerfile
+      target: development
+    command: yarn start:dev clients
+    env_file:
+      - ./apps/clients/.env
+    depends_on:
+      - mongodb-primary
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    ports:
+      - '3002:3002'
+    networks:
+      - my-network
+  
+  orders:
+    build:
+      context: .
+      dockerfile: ./apps/orders/Dockerfile
+      target: development
+    command: yarn start:dev orders
+    env_file:
+      - ./apps/orders/.env
+    depends_on:
+      - mongodb-primary
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    ports:
+      - '3003:3003'
+    networks:
+      - my-network
+  
+  prices:
+    build:
+      context: .
+      dockerfile: ./apps/prices/Dockerfile
+      target: development
+    command: yarn start:dev prices
+    env_file:
+      - ./apps/prices/.env
+    depends_on:
+      - mongodb-primary
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    ports:
+      - '3004:3004'
+    networks:
+      - my-network
+
+  products:
+    build:
+      context: .
+      dockerfile: ./apps/products/Dockerfile
+      target: development
+    command: yarn start:dev products
+    env_file:
+      - ./apps/products/.env
+    depends_on:
+      - mongodb-primary
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    ports:
+      - '3005:3005'
+    networks:
+      - my-network
+
+  mongodb-primary:
+    image: mongo:5.0.0
+    container_name: microservicio-database
+    ports:
+      - 27017:27017
+    volumes:
+      - ./mongo:/data/db
+    networks:
+      - my-network
+
+networks:
+  my-network:
+    driver: bridge
