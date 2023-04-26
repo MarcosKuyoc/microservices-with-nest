@@ -8,14 +8,9 @@ import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 export class ClientsController {
   constructor(private readonly clientsService: ClientsService) {}
 
-  @Get()
-  getHello(): string {
-    return this.clientsService.getHello();
-  }
-
   @ApiBearerAuth()
   @UseGuards(AuthorizationGuard)
-  @Get('/clients')
+  @Get()
   clients(): string {
     return this.clientsService.clients();
   }

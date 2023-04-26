@@ -10,7 +10,7 @@ export class ProductsController {
   @ApiBearerAuth()
   @UseGuards(AuthorizationGuard)
   @Get()
-  getHello(): string {
-    return this.productsService.getHello();
+  products(): string {
+    return this.productsService.products();
   }
 }

@@ -6,7 +6,7 @@ export class OrdersController {
   constructor(private readonly ordersService: OrdersService) {}
 
   @Get()
-  getHello(): string {
-    return this.ordersService.getHello();
+  orders(): string {
+    return this.ordersService.orders();
   }
 }

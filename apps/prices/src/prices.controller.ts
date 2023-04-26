@@ -10,7 +10,7 @@ export class PricesController {
   @ApiBearerAuth()
   @UseGuards(AuthorizationGuard)
   @Get()
-  getHello(): string {
-    return this.pricesService.getHello();
+  prices(): string {
+    return this.pricesService.prices();
   }
 }

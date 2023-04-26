@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 
 @Injectable()
 export class PricesService {
-  getHello(): string {
-    return 'Microservicio Prices';
+  prices(): string {
+    return 'Lista de precios';
   }
 }
