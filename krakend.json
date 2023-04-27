@@ -1,0 +1,25 @@
+{
+  "$schema": "https://www.krakend.io/schema/v3.json",
+  "version": 3,
+  "extra_config": {},
+  "name": "KrakenD - API Gateway",
+  "timeout": "3000ms",
+  "cache_ttl": "300s",
+  "output_encoding": "json",
+  "endpoints": [
+    {
+      "endpoint": "/users/login",
+      "method": "POST",
+      "output_encoding": "json",
+      "extra_config": {},
+      "backend": [
+        {
+          "encoding": "json",
+          "url_pattern": "/login",
+          "method": "POST",
+          "host": ["http://auth:3000"]
+        }
+      ]
+    }
+  ]
+}

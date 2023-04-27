@@ -1,4 +1,17 @@
 services:
+  krakend:
+    image: devopsfaith/krakend:watch
+    volumes:
+      - ".:/etc/krakend"
+    ports:
+      - "8080:8080"
+    command: [ "run", "-dc", "krakend.json" ]
+    depends_on:
+      - auth
+      - prices
+    networks:
+      - my-network
+
   auth:
     build:
       context: .
