@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
 import { ClientsController } from './clients.controller';
 import { ClientsService } from './clients.service';
-import { AuthorizationModule } from '../../share/authorization/authorization.module';
 import { ConfigModule } from '@nestjs/config';
 import * as Joi from 'joi';
+import { AuthorizationModule } from 'apps/shared/authorization/authorization.module';
 
 @Module({
   imports: [

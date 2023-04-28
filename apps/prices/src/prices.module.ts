@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { PricesController } from './prices.controller';
 import { PricesService } from './prices.service';
-import { AuthorizationModule } from 'apps/share/authorization/authorization.module';
+import { AuthorizationModule } from 'apps/shared/authorization/authorization.module';
 import { ConfigModule } from '@nestjs/config';
 import * as Joi from 'joi';
 @Module({
