@@ -11,6 +11,18 @@ services:
       - prices
     networks:
       - my-network
+  
+  rabbitmq: 
+    image: rabbitmq:3.12.0-rc.1-management-alpine
+    container_name: rabbitmq
+    restart: always
+    tty: true
+    stdin_open: true
+    ports:
+      - "15672:15672"
+      - "5672:5672"
+    networks:
+      - my-network
 
   auth:
     build:
@@ -24,12 +36,33 @@ services:
       - ./apps/auth/.env
     depends_on:
       - mongodb-primary
+      - rabbitmq
     volumes:
      - .:/usr/src/app
      - /usr/src/app/node_modules
     networks:
       - my-network
   
+  billing:
+    build:
+      context: .
+      dockerfile: ./apps/billing/Dockerfile
+      target: development
+    command: yarn start:dev billing
+    env_file:
+      - ./apps/billing/.env
+    depends_on:
+      - mongodb-primary
+      - rabbitmq
+      - auth
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    ports:
+      - '3001:3001'
+    networks:
+      - my-network
+
   clients:
     build:
       context: .
@@ -40,6 +73,7 @@ services:
       - ./apps/clients/.env
     depends_on:
       - mongodb-primary
+      - rabbitmq
     volumes:
       - .:/usr/src/app
       - /usr/src/app/node_modules
@@ -58,6 +92,9 @@ services:
       - ./apps/orders/.env
     depends_on:
       - mongodb-primary
+      - billing
+      - auth
+      - rabbitmq
     volumes:
       - .:/usr/src/app
       - /usr/src/app/node_modules
@@ -76,6 +113,7 @@ services:
       - ./apps/prices/.env
     depends_on:
       - mongodb-primary
+      - rabbitmq
     volumes:
       - .:/usr/src/app
       - /usr/src/app/node_modules
@@ -94,6 +132,7 @@ services:
       - ./apps/products/.env
     depends_on:
       - mongodb-primary
+      - rabbitmq
     volumes:
       - .:/usr/src/app
       - /usr/src/app/node_modules
