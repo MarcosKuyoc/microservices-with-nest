@@ -1,11 +1,10 @@
 {
   "$schema": "https://www.krakend.io/schema/v3.json",
   "version": 3,
-  "extra_config": {},
   "name": "KrakenD - API Gateway",
+  "port": 8080,
   "timeout": "3000ms",
   "cache_ttl": "300s",
-  "output_encoding": "json",
   "endpoints": [
     {
       "endpoint": "/users/login",
@@ -20,6 +19,60 @@
           "host": ["http://auth:3000"]
         }
       ]
+    },
+    {
+      "endpoint": "/purchase/{purchaseId}",
+      "method": "PATCH",
+      "output_encoding": "json",
+      "extra_config": {},
+      "backend": [
+        {
+          "encoding": "json",
+          "url_pattern": "/purchase/{purchaseId}/product",
+          "method": "PATCH",
+          "host": ["http://orders:3003"]
+        }
+      ]
     }
-  ]
+  ],
+  "extra_config": {
+    "telemetry/metrics": {
+      "collection_time": "30s",
+      "listen_address": ":8090"
+    },
+    "telemetry/logging": {
+      "level": "DEBUG",
+      "prefix": "[KRAKEND]",
+      "syslog": false,
+      "stdout": true
+    },
+    "telemetry/influx": {
+      "address": "http://influxdb:8086",
+      "ttl": "25s",
+      "buffer_size": 100,
+      "username": "krakend-dev",
+      "password": "pas5w0rd"
+    },
+    "telemetry/opencensus": {
+      "sample_rate": 100,
+      "reporting_period": 1,
+      "enabled_layers": {
+        "backend": true,
+        "router": true
+      },
+      "exporters": {
+        "jaeger": {
+          "endpoint": "http://jaeger:14268/api/traces",
+          "service_name": "krakend"
+        }
+      }
+    },
+    "security/cors": {
+      "allow_origins": ["*"],
+      "allow_methods": ["POST", "GET"],
+      "allow_headers": ["Origin", "Authorization", "Content-Type"],
+      "expose_headers": ["Content-Length"],
+      "max_age": "12h"
+    }
+  }
 }

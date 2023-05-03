@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { OrderOuput } from './interfaces/order.output';
-import { CreateOrderDto } from './dto/create.order.dto';
+import { UpdateOrderDto } from './dto/update.order.dto';
 
 @Injectable()
 export class OrdersService {
@@ -8,8 +8,14 @@ export class OrdersService {
     return 'Hello Orders!';
   }
 
-  orders(data: CreateOrderDto): Promise<OrderOuput> {
+  async addProductToCart(
+    purchaseId: string,
+    data: UpdateOrderDto,
+  ): Promise<OrderOuput> {
+    console.log(purchaseId);
     console.log(data);
-    return Promise.resolve({ data: 'La orden se ha creado!' });
+    return Promise.resolve({
+      data: `La orden con id:${purchaseId}  se ha creado!`,
+    });
   }
 }

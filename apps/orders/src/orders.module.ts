@@ -5,6 +5,7 @@ import { ConfigModule } from '@nestjs/config';
 import * as Joi from 'joi';
 import { RmqModule } from '@app/common/rmq/rmq.module';
 import { BILLING_SERVICE } from './keys/service';
+import { AuthModule } from '@app/common';
 //import { AuthorizationModule } from 'apps/shared/authorization/authorization.module';
 
 @Module({
@@ -26,6 +27,7 @@ import { BILLING_SERVICE } from './keys/service';
     RmqModule.register({
       name: BILLING_SERVICE,
     }),
+    AuthModule,
   ],
   controllers: [OrdersController],
   providers: [OrdersService],

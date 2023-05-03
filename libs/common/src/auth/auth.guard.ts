@@ -7,13 +7,15 @@ import {
 import { expressJwtSecret } from 'jwks-rsa';
 import { promisify } from 'util';
 import * as jwt from 'express-jwt';
-import { AUTH0_AUDIENCE, AUTH0_CLIENT_URL } from '../keys/auth0';
+import { AUTH0_AUDIENCE, AUTH0_CLIENT_URL } from './auth0';
 
 @Injectable()
-export class AuthorizationGuard implements CanActivate {
+export class AuthGuard implements CanActivate {
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const req = context.getArgByIndex(0);
     const res = context.getArgByIndex(1);
+    //const AUTH0_CLIENT_URL = this.configService.get('AUTH0_CLIENT_URL');
+    //const AUTH0_AUDIENCE = this.configService.get('AUTH0_AUDIENCE');
 
     const checkJwt = promisify(
       jwt({

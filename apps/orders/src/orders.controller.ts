@@ -1,12 +1,12 @@
-import { Body, Controller, Get, Inject, Post } from '@nestjs/common';
+import { Body, Controller, Get, Inject, Param, Patch, UseGuards } from '@nestjs/common';
 import { OrdersService } from './orders.service';
 import { ClientProxy } from '@nestjs/microservices';
 //import { RmqService } from '@app/common/rmq/rmq.service';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
-import { CreateOrderDto } from './dto/create.order.dto';
 import { BILLING_SERVICE } from './keys/service';
 import { OrderOuput } from './interfaces/order.output';
-//import { AuthorizationGuard } from 'apps/shared/authorization/authorization.guard';
+import { UpdateOrderDto } from './dto/update.order.dto';
+import { AuthGuard } from '@app/common';
 
 @Controller()
 export class OrdersController {
@@ -15,16 +15,23 @@ export class OrdersController {
     @Inject(BILLING_SERVICE) private billingClient: ClientProxy,
   ) {}
 
-  @Get('healtCheck')
+  @Get()
   healtCheck(): string {
     return this.ordersService.healtCheck();
   }
 
   @ApiTags('orders')
   @ApiBearerAuth()
-  @Post()
-  async orders(@Body() payload: CreateOrderDto): Promise<OrderOuput> {
-    const newOrder = await this.ordersService.orders(payload);
+  @UseGuards(AuthGuard)
+  @Patch('purchase/:purchaseId/product')
+  async addProductToCart(
+    @Param('purchaseId') purchaseId: string,
+    @Body() updateCreateDto: UpdateOrderDto,
+  ): Promise<OrderOuput> {
+    const newOrder = await this.ordersService.addProductToCart(
+      purchaseId,
+      updateCreateDto,
+    );
     this.billingClient.emit('order_created', newOrder);
     return newOrder;
   }

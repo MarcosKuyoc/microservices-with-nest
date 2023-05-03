@@ -3,7 +3,7 @@ import { ClientsController } from './clients.controller';
 import { ClientsService } from './clients.service';
 import { ConfigModule } from '@nestjs/config';
 import * as Joi from 'joi';
-import { AuthorizationModule } from 'apps/shared/authorization/authorization.module';
+import { AuthModule } from '@app/common';
 
 @Module({
   imports: [
@@ -18,7 +18,7 @@ import { AuthorizationModule } from 'apps/shared/authorization/authorization.mod
       }),
       envFilePath: './apps/clients/.env',
     }),
-    AuthorizationModule,
+    AuthModule,
   ],
   controllers: [ClientsController],
   providers: [ClientsService],

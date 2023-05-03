@@ -4,13 +4,9 @@ import { ProductsController } from './products.controller';
 import { ProductsService } from './products.service';
 import { CreateModule } from './create/create.module';
 import * as Joi from 'joi';
-//import { ORDER_SERVICE } from '../keys/services';
-//import { AuthorizationModule } from 'apps/shared/authorization/authorization.module';
 import { ORDER_SERVICE } from '../keys/services';
 import { RmqModule } from '@app/common/rmq/rmq.module';
-//import { AuthorizationModule } from 'apps/shared/authorization/authorization.module';
-//import { RmqModule } from '@app/common';
-//import { RmqModule } from '@app/common';
+import { AuthModule } from '@app/common';
 
 @Module({
   imports: [
@@ -31,6 +27,7 @@ import { RmqModule } from '@app/common/rmq/rmq.module';
       name: ORDER_SERVICE,
     }),
     CreateModule,
+    AuthModule,
   ],
   controllers: [ProductsController],
   providers: [ProductsService],

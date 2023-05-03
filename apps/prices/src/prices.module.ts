@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
 import { PricesController } from './prices.controller';
 import { PricesService } from './prices.service';
-import { AuthorizationModule } from 'apps/shared/authorization/authorization.module';
 import { ConfigModule } from '@nestjs/config';
 import * as Joi from 'joi';
+import { AuthModule } from '@app/common';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -17,7 +17,7 @@ import * as Joi from 'joi';
       }),
       envFilePath: './apps/prices/.env',
     }),
-    AuthorizationModule,
+    AuthModule,
   ],
   controllers: [PricesController],
   providers: [PricesService],

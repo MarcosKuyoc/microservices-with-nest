@@ -6,9 +6,6 @@ import { ConfigService } from '@nestjs/config';
 
 async function bootstrap() {
   const app = await NestFactory.create(ProductsModule);
-  // const rmqService = app.get<RmqService>(RmqService);
-  // app.connectMicroservice(rmqService.getOptions('ORDER'));
-  // await app.startAllMicroservices();
   const config = new DocumentBuilder()
     .addBearerAuth()
     .setTitle('API Rest para control de productos')

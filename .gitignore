@@ -39,3 +39,11 @@ lerna-debug.log*
 
 # mongo
 mongo/
+
+# docker respaldo
+docker-compose-respaldo.yml
+
+# proyectos adicionales
+apps/clients
+apps/products
+apps/prices
