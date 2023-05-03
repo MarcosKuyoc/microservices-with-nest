@@ -1,8 +1,9 @@
 import {
   CanActivate,
   ExecutionContext,
+  HttpException,
+  HttpStatus,
   Injectable,
-  UnauthorizedException,
 } from '@nestjs/common';
 import { expressJwtSecret } from 'jwks-rsa';
 import { promisify } from 'util';
@@ -14,8 +15,6 @@ export class AuthGuard implements CanActivate {
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const req = context.getArgByIndex(0);
     const res = context.getArgByIndex(1);
-    //const AUTH0_CLIENT_URL = this.configService.get('AUTH0_CLIENT_URL');
-    //const AUTH0_AUDIENCE = this.configService.get('AUTH0_AUDIENCE');
 
     const checkJwt = promisify(
       jwt({
@@ -35,8 +34,8 @@ export class AuthGuard implements CanActivate {
       await checkJwt(req, res);
       return true;
     } catch (error) {
-      console.log(error);
-      throw new UnauthorizedException(error);
+      console.log(error.message);
+      throw new HttpException('API not available', HttpStatus.UNAUTHORIZED);
     }
   }
 }
