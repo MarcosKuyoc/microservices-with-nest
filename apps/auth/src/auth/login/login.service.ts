@@ -40,7 +40,8 @@ export class LoginService {
           }),
         )
         .pipe(
-          catchError(() => {
+          catchError((error) => {
+            console.log(error.message);
             throw new HttpException(
               'API not available',
               HttpStatus.UNAUTHORIZED,
