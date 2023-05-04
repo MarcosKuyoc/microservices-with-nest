@@ -1,1 +1,4 @@
 .env
+# ingorar archivos tracer de open telemetri por el momento
+tracer.ts
+tracer-jaeger.ts
