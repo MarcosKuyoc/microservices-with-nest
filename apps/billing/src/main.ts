@@ -2,9 +2,11 @@ import { NestFactory } from '@nestjs/core';
 import { BillingModule } from './billing.module';
 import { RmqService } from '@app/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { Logger } from 'nestjs-pino';
 
 async function bootstrap() {
   const app = await NestFactory.create(BillingModule);
+  app.useLogger(app.get(Logger));
   const config = new DocumentBuilder()
     .addBearerAuth()
     .setTitle('API Rest para control de clientes')

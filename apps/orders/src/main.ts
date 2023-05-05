@@ -2,9 +2,11 @@ import { NestFactory } from '@nestjs/core';
 import { OrdersModule } from './orders.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { ConfigService } from '@nestjs/config';
+import { Logger } from 'nestjs-pino';
 
 async function bootstrap() {
   const app = await NestFactory.create(OrdersModule);
+  app.useLogger(app.get(Logger));
   const config = new DocumentBuilder()
     .addBearerAuth()
     .setTitle('API Rest para control de Ordenes')

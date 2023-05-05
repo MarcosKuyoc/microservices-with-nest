@@ -1,15 +1,45 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { OrdersController } from './orders.controller';
 import { OrdersService } from './orders.service';
 import { ConfigModule } from '@nestjs/config';
 import * as Joi from 'joi';
 import { RmqModule } from '@app/common/rmq/rmq.module';
 import { BILLING_SERVICE } from './keys/service';
-import { AuthModule } from '@app/common';
-//import { AuthorizationModule } from 'apps/shared/authorization/authorization.module';
+import {
+  AuthModule,
+  CORRELATION_ID_HEADER,
+  CorrelationIdMiddleware,
+} from '@app/common';
+import { LoggerModule } from 'nestjs-pino';
+import { Request } from 'express';
 
 @Module({
   imports: [
+    LoggerModule.forRoot({
+      pinoHttp: {
+        transport: {
+          target: 'pino-pretty',
+          options: {
+            messageKey: 'message',
+          },
+        },
+        messageKey: 'message',
+        customProps: (req: Request) => {
+          return {
+            correlationId: req[CORRELATION_ID_HEADER],
+          };
+        },
+        autoLogging: false,
+        serializers: {
+          req: () => {
+            return undefined;
+          },
+          res: () => {
+            return undefined;
+          },
+        },
+      },
+    }),
     ConfigModule.forRoot({
       isGlobal: true,
       validationSchema: Joi.object({
@@ -32,4 +62,8 @@ import { AuthModule } from '@app/common';
   controllers: [OrdersController],
   providers: [OrdersService],
 })
-export class OrdersModule {}
+export class OrdersModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(CorrelationIdMiddleware).forRoutes('*');
+  }
+}
